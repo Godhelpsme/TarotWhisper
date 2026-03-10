@@ -44,3 +44,7 @@ next-env.d.ts
 # Azion build output
 .open-next/
 .azion/
+#Paths added by Azion CLI
+.edge/
+.vulcan
+.open-next

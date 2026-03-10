@@ -83,10 +83,49 @@ azion deploy --skip-build --local
 
 ## Windows 用户注意事项
 
-OpenNext 工具在 Windows 上有已知兼容性问题，但经过测试可以正常构建。如果遇到问题：
+**重要**：OpenNext 工具在 Windows 上有路径处理的兼容性问题，会导致 `azion build` 命令失败。
 
-1. **推荐方案**：使用 WSL (Windows Subsystem for Linux)
-2. **备选方案**：直接在 Windows 上构建（已验证可行，但可能有运行时警告）
+### 推荐解决方案
+
+**方案 A：使用 WSL（推荐）**
+
+1. 安装 WSL：
+   ```powershell
+   wsl --install
+   ```
+
+2. 在 WSL 中执行所有构建和部署命令：
+   ```bash
+   cd /mnt/d/Github/coding/TarotWhisper
+   npm install
+   azion build --preset opennextjs
+   azion deploy --skip-build --local
+   ```
+
+**方案 B：使用 GitHub Actions 自动部署**
+
+项目已包含 `.github/workflows/azion-deploy.yml`，配置步骤：
+
+1. 创建 Azion Personal Token：
+   ```bash
+   azion create personal-token
+   ```
+
+2. 在 GitHub 仓库设置中添加 Secret：
+   - 名称：`AZION_PERSONAL_TOKEN`
+   - 值：上一步生成的 token
+
+3. 推送代码到 GitHub，在 Actions 标签页手动触发部署
+
+**方案 C：本地构建 + 手动上传（不推荐）**
+
+虽然 `npx opennextjs-azion build` 可以在 Windows 上成功生成 `.open-next` 目录，但 Azion CLI 的部署命令需要 `.edge` 目录（由 `azion build` 生成）。由于 Windows 路径问题，这个流程无法完整执行。
+
+### 已知问题
+
+- `azion build --preset opennextjs` 在 Windows 上会因路径格式问题失败
+- 错误信息：`Invalid path for a Cache Asset file: \\?\D:\...`
+- 这是 Azion 工具链的已知限制，官方建议使用 WSL
 
 ## 环境变量配置
 
