@@ -24,41 +24,41 @@ module.exports = {
   },
   storage: [
     {
-      name: '$BUCKET_NAME',
-      prefix: '$BUCKET_PREFIX',
+      name: 'TarotWhisper-20260310162134',
+      prefix: '20260311084644',
       dir: './.edge/assets',
       workloadsAccess: 'read_write'
     }
   ],
   connectors: [
     {
-      name: '$CONNECTOR_NAME',
+      name: 'TarotWhisper-20260310162134',
       active: true,
       type: 'storage',
       attributes: {
-        bucket: '$BUCKET_NAME',
-        prefix: '$BUCKET_PREFIX'
+        bucket: 'TarotWhisper-20260310162134',
+        prefix: '20260311084644'
       }
     }
   ],
   functions: [
     {
-      name: '$FUNCTION_NAME',
+      name: 'TarotWhisper-20260310162134',
       path: './functions/worker.js',
       bindings: {
         storage: {
-          bucket: '$BUCKET_NAME',
-          prefix: '$BUCKET_PREFIX'
+          bucket: 'TarotWhisper-20260310162134',
+          prefix: '20260311084644'
         }
       }
     }
   ],
   applications: [
     {
-      name: '$APPLICATION_NAME',
+      name: 'TarotWhisper-20260310162134',
       cache: [
         {
-          name: '$APPLICATION_NAME',
+          name: 'TarotWhisper-20260310162134',
           browser: {
             maxAgeSeconds: 7200
           },
@@ -88,13 +88,13 @@ module.exports = {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: '$CONNECTOR_NAME'
+                  value: 'TarotWhisper-20260310162134'
                 }
               },
               {
                 type: 'set_cache_policy',
                 attributes: {
-                  value: '$APPLICATION_NAME'
+                  value: 'TarotWhisper-20260310162134'
                 }
               },
               {
@@ -122,13 +122,13 @@ module.exports = {
               {
                 type: 'set_connector',
                 attributes: {
-                  value: '$CONNECTOR_NAME'
+                  value: 'TarotWhisper-20260310162134'
                 }
               },
               {
                 type: 'set_cache_policy',
                 attributes: {
-                  value: '$APPLICATION_NAME'
+                  value: 'TarotWhisper-20260310162134'
                 }
               },
               {
@@ -154,7 +154,7 @@ module.exports = {
               {
                 type: 'run_function',
                 attributes: {
-                  value: '$FUNCTION_NAME'
+                  value: 'TarotWhisper-20260310162134'
                 }
               },
               {
@@ -166,26 +166,26 @@ module.exports = {
       },
       functionsInstances: [
         {
-          name: '$FUNCTION_INSTANCE_NAME',
-          ref: '$FUNCTION_NAME'
+          name: 'TarotWhisper-20260310162134',
+          ref: 'TarotWhisper-20260310162134'
         }
       ]
     }
   ],
   workloads: [
     {
-      name: '$WORKLOAD_NAME',
+      name: 'TarotWhisper-20260310162134',
       active: true,
       infrastructure: 1,
       deployments: [
         {
-          name: '$DEPLOYMENT_NAME',
+          name: 'TarotWhisper-20260310162134',
           current: true,
           active: true,
           strategy: {
             type: 'default',
             attributes: {
-              application: '$APPLICATION_NAME'
+              application: 'TarotWhisper-20260310162134'
             }
           }
         }
