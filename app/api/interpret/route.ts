@@ -17,9 +17,26 @@ const FALLBACK_CONFIG = {
   enabled: process.env.ENABLE_FALLBACK_LLM === 'true',
 };
 
-// 注意：在 Azion Edge 环境中，应使用 Edge Firewall 的速率限制规则
-// 而非内存 Map（Edge Functions 无状态，Map 会在每次请求后重置）
-// 配置方法：Azion 控制台 → Edge Firewall → Rate Limiting Rules
+// 简单的内存速率限制（生产环境建议使用 Redis）
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_PER_HOUR = parseInt(process.env.RATE_LIMIT_PER_HOUR || '10', 10);
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 3600000 }); // 1 hour
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT_PER_HOUR) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,6 +61,20 @@ export async function POST(request: NextRequest) {
     let usingFallback = false;
 
     if (!apiConfig.apiKey && FALLBACK_CONFIG.enabled && FALLBACK_CONFIG.apiKey) {
+      // 使用后备配置时进行速率限制
+      const ip = request.headers.get('x-forwarded-for') ||
+                 request.headers.get('x-real-ip') ||
+                 'unknown';
+
+      if (!checkRateLimit(ip)) {
+        return new Response(
+          JSON.stringify({
+            error: `请求过于频繁，每小时最多 ${RATE_LIMIT_PER_HOUR} 次请求。建议配置自己的 API Key 以解除限制。`
+          }),
+          { status: 429, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
       effectiveConfig = FALLBACK_CONFIG;
       usingFallback = true;
     } else if (!apiConfig.apiKey) {
