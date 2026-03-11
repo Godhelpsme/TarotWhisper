@@ -53,6 +53,15 @@ jobs:
         run: |
           azion build --preset opennextjs
 
+      - name: Debug - Check build output
+        run: |
+          echo "=== Checking .edge directory ==="
+          ls -la .edge/ || echo ".edge not found"
+          echo "=== Checking .open-next directory ==="
+          ls -la .open-next/ || echo ".open-next not found"
+          echo "=== Checking for worker.js ==="
+          find . -name "worker.js" -not -path "*/node_modules/*" || echo "No worker.js found"
+
       # You may add the --sync flag to sync local and remote resources
       - name: Azion Deploy
         run: |
