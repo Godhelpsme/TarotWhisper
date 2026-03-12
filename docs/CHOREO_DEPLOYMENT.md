@@ -25,7 +25,7 @@ TarotWhisper/
 ### 2. 推送代码到 GitHub
 
 ```bash
-cd D:\Github\coding\TarotWhisper
+cd TarotWhisper
 git add .
 git commit -m "Add Choreo deployment configuration"
 git push origin main
