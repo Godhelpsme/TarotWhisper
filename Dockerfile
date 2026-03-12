@@ -5,6 +5,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Update Alpine packages to fix security vulnerabilities
+RUN apk update && apk upgrade --no-cache
+
 # Copy package files
 COPY package.json ./
 
@@ -20,6 +23,9 @@ RUN npm run build
 # Stage 2: Runner
 FROM node:20-alpine AS runner
 WORKDIR /app
+
+# Update Alpine packages to fix security vulnerabilities (including zlib CVE-2026-22184)
+RUN apk update && apk upgrade --no-cache
 
 # Set production environment
 ENV NODE_ENV=production
